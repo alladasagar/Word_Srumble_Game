@@ -2,28 +2,28 @@ const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
 
+// Update score only if the new score is higher
 router.post("/update-score", async (req, res) => {
   try {
-    const { userId, score } = req.body;
-    console.log("Backend: User ID:", userId, "Score:", score);
+    const { email, score } = req.body;
+    console.log("Backend: Received Email:", email, "Score:", score);
 
-    if (!userId || score === undefined) {
-      return res.status(400).json({ message: "User ID and Score are required" });
+    if (!email || score === undefined) {
+      return res.status(400).json({ message: "Email and Score are required" });
     }
 
-    // Fetch the existing user score
-    const user = await User.findById(userId);
-    
+    // Find user by email
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update only if the new score is greater than the existing score
+    // Update only if the new score is higher
     if (user.score < score) {
       user.score = score;
       await user.save();
       return res.status(200).json({ message: "Score updated successfully", user });
-    } 
+    }
 
     res.status(200).json({ message: "New score is not higher, no update made", user });
 
@@ -33,27 +33,45 @@ router.post("/update-score", async (req, res) => {
   }
 });
 
-// Get leaderboard (paginated)
+
+// Optimized Leaderboard Route with Rank Calculation
 router.get("/leaderboard", async (req, res) => {
   try {
     const { userId, page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
-    // Fetch paginated leaderboard players
-    const leaderboard = await User.find({})
-      .sort({ score: -1 })
-      .skip(skip)
-      .limit(parseInt(limit))
-      .select("username score updatedAt");
+    // Fetch paginated leaderboard with ranking
+    const leaderboard = await User.aggregate([
+      { $sort: { score: -1, updatedAt: 1 } },
+      {
+        $setWindowFields: {
+          sortBy: { score: -1 },
+          output: { rank: { $documentNumber: {} } },
+        },
+      },
+      { $skip: parseInt(skip) },
+      { $limit: parseInt(limit) },
+      { $project: { username: 1, score: 1, rank: 1 } },
+    ]);
 
     // Get total user count
     const totalUsers = await User.countDocuments();
 
+    // Find the logged-in user's rank
     let userRank = null;
     if (userId) {
-      // Find the rank of the logged-in user
-      const allUsers = await User.find({}).sort({ score: -1 }).select("_id");
-      userRank = allUsers.findIndex(user => user._id.toString() === userId) + 1;
+      const userRankData = await User.aggregate([
+        { $sort: { score: -1, updatedAt: 1 } },
+        {
+          $setWindowFields: {
+            sortBy: { score: -1 },
+            output: { rank: { $documentNumber: {} } },
+          },
+        },
+        { $match: { _id: userId } },
+        { $project: { rank: 1 } },
+      ]);
+      userRank = userRankData.length ? userRankData[0].rank : null;
     }
 
     res.status(200).json({ leaderboard, userRank, totalUsers });
@@ -62,8 +80,5 @@ router.get("/leaderboard", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
-
-
 
 module.exports = router;

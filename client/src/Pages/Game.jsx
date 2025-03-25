@@ -29,7 +29,7 @@ const Game = () => {
   };
 
   const getNewWord = () => {
-    if (attempts >= 10) {
+    if (attempts >= 9) {
       setGameOver(true);
       return;
     }
@@ -52,19 +52,15 @@ const Game = () => {
   }, [gameStarted]);
 
   useEffect(() => {
-    if (timeLeft > 0 && currentWord) {
-      const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-      return () => clearInterval(timer);
-    } else if (timeLeft === 0) {
-      getNewWord();
-    }
-  }, [timeLeft, currentWord]);
-
-  useEffect(() => {
+    console.log("Checking user before sending score:", user);
+    
     if (gameOver && user) {
-      sendScore({ userId: user.id, score });
+      sendScore({ email: user.email, score });
+    } else if (gameOver) {
+      console.error("User object is missing or incomplete:", user);
     }
   }, [gameOver, user, score]);
+  
 
   const checkAnswer = () => {
     if (userInput.trim().toUpperCase() === currentWord.answer.toUpperCase()) {
@@ -82,6 +78,25 @@ const Game = () => {
       }, 300);
     }
   };
+  useEffect(() => {
+    if (gameStarted && !gameOver && timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+  
+      return () => clearInterval(timer); // Cleanup on unmount or update
+    }
+  
+    if (timeLeft === 0) {
+      if (attempts < 9) {
+        getNewWord(); // Move to the next word
+      } else {
+        setGameOver(true); // End game after 10 attempts
+      }
+    }
+  }, [timeLeft, gameStarted, gameOver, attempts]);
+  
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">

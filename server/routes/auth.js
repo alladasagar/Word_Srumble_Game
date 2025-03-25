@@ -108,6 +108,9 @@ router.post("/google", async (req, res) => {
       });
       await user.save();
     }
+    else{
+      return res.status(400).json({ message: "User already exists" });
+    }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
