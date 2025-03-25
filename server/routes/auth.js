@@ -86,7 +86,7 @@ router.get(
   passport.authenticate("google", { session: false }),
   (req, res) => {
     const { token } = req.user;
-    res.redirect(`http://localhost:5173/dashboard?token=${token}`);
+    res.redirect(`https://word-srumble-game.vercel.app/dashboard?token=${token}`);
   }
 );
 
@@ -132,7 +132,7 @@ router.get(
   passport.authenticate("google", { session: false }),
   (req, res) => {
     const { token } = req.user;
-    res.redirect(`http://localhost:5173/home?token=${token}`);
+    res.redirect(`https://word-srumble-game.vercel.app/home?token=${token}`);
   }
 );
 

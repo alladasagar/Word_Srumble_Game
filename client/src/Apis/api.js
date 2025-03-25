@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const BaseUrl = "http://localhost:5000/api/auth";
+const BaseUrl = "https://word-srumble-game.vercel.app/";
 
 export const getUser = async () => {
   const token = localStorage.getItem("token");
   if (!token) return null;
 
   try {
-    const response = await fetch("http://localhost:5000/api/user", {
+    const response = await fetch("https://word-srumble-game.vercel.app/api/user", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
