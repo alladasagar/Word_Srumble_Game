@@ -3,7 +3,7 @@ import { getLeaderboard } from "../Apis/game";
 import { useAuth } from "../context/AuthContext";
 
 const LeaderBoard = () => {
-  const { user } = useAuth(); // Get logged-in user
+  const { user } = useAuth(); 
   const [leaderboard, setLeaderboard] = useState([]);
   const [userRank, setUserRank] = useState(null);
   const [page, setPage] = useState(1);
@@ -54,9 +54,13 @@ const LeaderBoard = () => {
             </thead>
             <tbody>
               {leaderboard.map((player, index) => (
-                <tr key={player._id} className="border-b hover:bg-gray-100">
+                <tr
+                  key={player._id}
+                  className={`border-b hover:bg-gray-100 ${user?._id === player._id ? "text-blue-600 font-bold" : ""
+                    }`}
+                >
                   <td className="py-2 px-4">{(page - 1) * usersPerPage + index + 1}</td>
-                  <td className="py-2 px-4 font-semibold">{player.username}</td>
+                  <td className="py-2 px-4">{player.username}</td>
                   <td className="py-2 px-4">{player.score}</td>
                 </tr>
               ))}

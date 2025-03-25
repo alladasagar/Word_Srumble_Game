@@ -3,16 +3,10 @@ import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../utils/Spinner"; // Import Spinner component
 
-const LandingPage = ({ isAuthenticated }) => {
-  const [loading, setLoading] = useState(true);
+const LandingPage = ({ isAuthenticated, isAuthLoading }) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
+  if (isAuthLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Spinner />
@@ -30,10 +24,10 @@ const LandingPage = ({ isAuthenticated }) => {
             <p className="text-gray-600 mt-2">
               Join thousands of players testing their vocabulary and quick thinking.
             </p>
-            <button className="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg" 
-            onClick={() => navigate("/game")}
+            <button className="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg"
+              onClick={() => navigate("/game")}
             >
-              Start Playing
+              {isAuthLoading ? <Spinner size="small" /> : "Start Playing"}
             </button>
           </div>
         ) : (
@@ -41,11 +35,11 @@ const LandingPage = ({ isAuthenticated }) => {
             <span className="bg-blue-100 text-blue-600 px-4 py-1 rounded-full text-sm md:text-base">
               Challenge Your Vocabulary
             </span>
-            <h1 className="text-6xl font-bold mt-4 md:text-5xl sm:text-3xl xs:text-2xl m-2">
+            <h1 className="text-4xl font-bold mt-4 md:text-3xl sm:text-2xl xs:text-xl m-2">
               Unscramble Words. Beat the Clock.
             </h1>
             <p className="text-gray-600 mt-2 max-w-xl md:max-w-lg sm:max-w-sm text-xl md:text-lg sm:text-base">
-              A fast-paced word game that challenges your vocabulary and quick thinking. 
+              A fast-paced word game that challenges your vocabulary and quick thinking.
               Unscramble letters before time runs out!
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-4">
@@ -64,7 +58,8 @@ const LandingPage = ({ isAuthenticated }) => {
         )}
       </div>
 
-      <div className="bg-gray-100 py-16 px-4 text-center">
+      {/* How It Works Section */}
+      <div className="bg-gray-100 py-10 px-4 text-center">
         <h2 className="text-4xl font-bold">How It Works</h2>
         <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
           WordScramble is a simple yet addictive word game that tests your vocabulary and quick thinking.
@@ -93,6 +88,7 @@ const LandingPage = ({ isAuthenticated }) => {
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );

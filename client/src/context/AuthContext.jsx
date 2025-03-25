@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
         } else {
           // Ensure correct ID is used
           const userId = decodedUser._id || decodedUser.id;
+          const userEmail = decodedUser.email;
           setUser({ _id: userId, email: decodedUser.email });
           console.log("User authenticated:", { _id: userId, email: decodedUser.email });
         }

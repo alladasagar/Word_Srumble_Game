@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import wordsData from "../assests/data";
 import { useAuth } from "../context/AuthContext";
 import { sendScore } from "../Apis/game";
-
+import Spinner from "../utils/Spinner"; // Import Spinner component
 
 const Game = () => {
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ const Game = () => {
   const [gameOver, setGameOver] = useState(false);
   const [inputStatus, setInputStatus] = useState(null);
   const [gameStarted, setGameStarted] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading only for score submission
 
   const { user } = useAuth();
 
@@ -52,15 +53,11 @@ const Game = () => {
   }, [gameStarted]);
 
   useEffect(() => {
-    console.log("Checking user before sending score:", user);
-    
     if (gameOver && user) {
-      sendScore({ email: user.email, score });
-    } else if (gameOver) {
-      console.error("User object is missing or incomplete:", user);
+      setLoading(true);
+      sendScore({ email: user.email, score }).finally(() => setLoading(false));
     }
   }, [gameOver, user, score]);
-  
 
   const checkAnswer = () => {
     if (userInput.trim().toUpperCase() === currentWord.answer.toUpperCase()) {
@@ -78,33 +75,35 @@ const Game = () => {
       }, 300);
     }
   };
+
   useEffect(() => {
     if (gameStarted && !gameOver && timeLeft > 0) {
       const timer = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
-  
-      return () => clearInterval(timer); // Cleanup on unmount or update
+
+      return () => clearInterval(timer);
     }
-  
+
     if (timeLeft === 0) {
       if (attempts < 9) {
-        getNewWord(); // Move to the next word
+        getNewWord();
       } else {
-        setGameOver(true); // End game after 10 attempts
+        setGameOver(true);
       }
     }
   }, [timeLeft, gameStarted, gameOver, attempts]);
-  
-  
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
+    <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 px-4 pt-10">
       {!gameStarted ? (
         <div className="bg-white p-8 md:p-10 rounded-lg shadow-md text-center max-w-lg md:max-w-xl transition-all w-full">
           <h2 className="text-2xl font-bold text-blue-600 mb-4">Word Scramble Game</h2>
           <p className="text-lg text-gray-700 mb-4">Unscramble the word before time runs out!</p>
-          <button onClick={() => setGameStarted(true)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-all">
+          <button 
+            onClick={() => setGameStarted(true)} 
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-all"
+          >
             Start Game
           </button>
         </div>
@@ -113,20 +112,45 @@ const Game = () => {
           <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md relative">
             <h2 className="text-3xl font-bold text-red-500">Game Over!</h2>
             <p className="text-xl font-semibold text-gray-700 mb-4">Final Score: {score}</p>
-            <button onClick={() => { setGameOver(false); setScore(0); setAttempts(0); setWords([...wordsData]); getNewWord(); }} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2 transition-all">
-              Play Again
-            </button>
-            <button onClick={() => navigate("/leaderboard")} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded m-2 transition-all">
-              Leaderboard
-            </button>
+            {loading ? <Spinner /> : (
+              <>
+                <button 
+                  onClick={() => { 
+                    setGameOver(false); 
+                    setScore(0); 
+                    setAttempts(0); 
+                    setWords([...wordsData]); 
+                    getNewWord(); 
+                  }} 
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2 transition-all"
+                >
+                  Play Again
+                </button>
+                <button 
+                  onClick={() => navigate("/leaderboard")} 
+                  className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded m-2 transition-all"
+                >
+                  Leaderboard
+                </button>
+              </>
+            )}
           </div>
         </div>
       ) : currentWord ? (
         <div className="bg-white p-8 md:p-10 rounded-lg shadow-md text-center max-w-lg md:max-w-xl transition-all w-full">
           <h2 className="text-2xl font-bold text-blue-600 mb-4">Word Scramble Game</h2>
           <p className="text-2xl font-semibold text-gray-800 tracking-widest">{scrambledWord}</p>
-          <input type="text" className={`border p-3 rounded-lg text-lg w-full transition-all ${inputStatus === "correct" ? "bg-green-200 border-green-500" : ""} ${inputStatus === "wrong" ? "bg-red-200 border-red-500" : ""}`} value={userInput} onChange={(e) => setUserInput(e.target.value)} placeholder="Enter your answer" />
-          <button onClick={checkAnswer} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg mt-4 transition-all">
+          <input 
+            type="text" 
+            className={`border p-3 rounded-lg text-lg w-full transition-all ${inputStatus === "correct" ? "bg-green-200 border-green-500" : ""} ${inputStatus === "wrong" ? "bg-red-200 border-red-500" : ""}`} 
+            value={userInput} 
+            onChange={(e) => setUserInput(e.target.value)} 
+            placeholder="Enter your answer" 
+          />
+          <button 
+            onClick={checkAnswer} 
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg mt-4 transition-all"
+          >
             Submit
           </button>
           <p className="text-red-600 font-semibold">Time Left: {timeLeft}s</p>
