@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BaseUrl = "http://localhost:5000/api/game";
+const BaseUrl = "https://word-srumble-game.vercel.app/api/game";
 
 export const sendScore = async ({ email, score }) => {
   try {

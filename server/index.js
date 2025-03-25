@@ -13,7 +13,7 @@ const gameRoutes = require("./routes/game");
 
 const app = express();
 
-// ✅ Improved Allowed Origins (Fixing CORS issues)
+//  Improved Allowed Origins (Fixing CORS issues)
 const allowedOrigins = [
   "https://word-srumble-game.vercel.app",
   "http://localhost:5173" // Allow local frontend during development
@@ -34,34 +34,34 @@ app.use(
   })
 );
 
-// ✅ Security Headers Fix (Prevents iframe & cross-origin issues)
+//  Security Headers Fix (Prevents iframe & cross-origin issues)
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
   res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
   next();
 });
 
-// ✅ Initialize Middleware
+//  Initialize Middleware
 app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
 
-// ✅ Improved Database Connection Handling
+//  Improved Database Connection Handling
 connectDB().catch((err) => {
   console.error("❌ Database Connection Failed:", err);
   process.exit(1); // Exit if DB connection fails
 });
 
-// ✅ Routes
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/game", gameRoutes);
 
-// ✅ Root Route
+//  Root Route
 app.get("/", (req, res) => {
   res.send("🚀 Server is running...");
 });
 
-// ✅ Start Server
+//  Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🔥 Server running on port ${PORT}`);
