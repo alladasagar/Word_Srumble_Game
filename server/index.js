@@ -17,7 +17,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+const allowedOrigins = ["https://word-srumble-game.vercel.app/"]
 
 app.use(
   cors({
