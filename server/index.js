@@ -15,8 +15,9 @@ const app = express();
 
 //  Improved Allowed Origins (Fixing CORS issues)
 const allowedOrigins = [
-  "https://word-srumble-game.vercel.app",
-  "http://localhost:5173" // Allow local frontend during development
+  "https://word-srumble-game.vercel.app", // Frontend (Vercel)
+  "http://localhost:5173", // Local development
+  "https://your-backend-service.onrender.com" // Replace with your actual Render backend URL
 ];
 
 app.use(
@@ -25,14 +26,15 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        console.error("Blocked by CORS:", origin);
+        console.error("❌ Blocked by CORS:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true,
+    credentials: true, // Important for authentication cookies
     methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"], // Ensure headers are handled correctly
   })
-);
+)
 
 //  Security Headers Fix (Prevents iframe & cross-origin issues)
 app.use((req, res, next) => {
