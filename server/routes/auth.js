@@ -185,8 +185,12 @@ router.post("/signin", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    // ✅ Include email in JWT payload
+    const token = jwt.sign(
+      { id: user._id, email: user.email }, // Now includes email
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     console.log("Generated Token:", token);
 
@@ -197,6 +201,7 @@ router.post("/signin", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+
 
 
 
