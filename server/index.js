@@ -17,7 +17,7 @@ const app = express();
 const allowedOrigins = [
   "https://word-srumble-game.vercel.app", // Frontend (Vercel)
   "http://localhost:5173", // Local development
-  "https://your-backend-service.onrender.com" // Replace with your actual Render backend URL
+  "https://word-srumble-game.onrender.com" // Replace with your actual Render backend URL
 ];
 
 app.use(
