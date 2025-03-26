@@ -9,25 +9,30 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     console.log("🔑 Token from localStorage:", token);
-  
+
     if (token) {
-      try {
-        const decodedUser = jwtDecode(token);
-        console.log("🛠️ Decoded Token:", decodedUser);
-  
-        if (decodedUser.exp * 1000 < Date.now()) {
-          console.log("⚠️ Token expired. Logging out...");
-          logout();
-        } else {
-          setUser({ _id: decodedUser._id || decodedUser.id, email: decodedUser.email });
-          console.log("✅ User Authenticated:", { _id: decodedUser._id || decodedUser.id, email: decodedUser.email });
+        try {
+            const decodedUser = jwtDecode(token);
+            console.log("🛠️ Decoded Token:", decodedUser);
+
+            if (decodedUser.exp * 1000 < Date.now()) {
+                console.log("⚠️ Token expired. Logging out...");
+                logout();
+            } else {
+                // Ensure `_id` and `email` exist before setting the user
+                const userId = decodedUser._id || decodedUser.id || "";
+                const userEmail = decodedUser.email || "";  // Ensure it's never undefined
+
+                setUser({ _id: userId, email: userEmail });
+                console.log("✅ User Authenticated:", { _id: userId, email: userEmail });
+            }
+        } catch (error) {
+            console.error("❌ Invalid token:", error);
+            logout();
         }
-      } catch (error) {
-        console.error("❌ Invalid token:", error);
-        logout();
-      }
     }
-  }, []);
+}, []);
+
   
   
 
