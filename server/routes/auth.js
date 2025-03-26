@@ -213,7 +213,7 @@ router.get("/check-username/:username", async (req, res) => {
       return res.status(200).json({ message: "Username available" });
     }
   }
-  catch(error) {
+  catch(error) {  
     console.error("Check Username Error:", error);
   }
 });
