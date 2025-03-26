@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BaseUrl = "https://word-srumble-game.vercel.app/";
+const BaseUrl = "https://word-srumble-game.vercel.app";
 
 export const getUser = async () => {
   const token = localStorage.getItem("token");
