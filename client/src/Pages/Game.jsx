@@ -85,7 +85,7 @@ const Game = () => {
     }
 
     if (timeLeft === 0) {
-      if (attempts < 9) {
+      if (attempts < 10) {
         getNewWord();
       } else {
         setGameOver(true);
