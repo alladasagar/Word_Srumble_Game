@@ -22,7 +22,7 @@ const Game = () => {
   const { user } = useAuth();
 
   const shuffleWord = (word) => {
-    return word.split("").sort(() => Math.random() - 0.5).join("");
+    return word.split("").sort(() => Math.random() - 0.5).join("  ");
   };
   
   const getNewWord = () => {
