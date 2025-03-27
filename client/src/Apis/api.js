@@ -43,6 +43,7 @@ export const SignUp = async (data) => {
 export const GoogleSignUp = async (data) => {
   try {
     const response = await axios.post(`${BaseUrl}/google`, data);
+    console.log("API Response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Google Sign-Up API Error:", error.response?.data || error);
