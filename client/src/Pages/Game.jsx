@@ -56,7 +56,7 @@ const Game = () => {
     if (gameOver && user) {
       setLoading(true);
       sendScore({ email: user.email, score }).finally(() => setLoading(false));
-      console.log("Sending Score:", { email: user?.email, score });
+      console.log("Score submitted:", user.email, score);
     }
   }, [gameOver, user, score]);
 
