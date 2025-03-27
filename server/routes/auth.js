@@ -10,30 +10,31 @@ const router = express.Router();
 // Middleware to verify token
 const authenticateUser = async (req, res, next) => {
   try {
-    // Extract the token from the Authorization header
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Unauthorized: No token provided" });
+      return res.status(401).json({ message: "Unauthorized: Token missing" });
     }
 
-    const token = authHeader.split(" ")[1]; // Extract the token
+    const token = authHeader.split(" ")[1];
 
-    // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Fetch the user from the database
-    const user = await User.findById(decoded.id).select("-password");
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded.id).select("-password");
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      req.user = user;
+      next();
+    } catch (err) {
+      return res.status(401).json({ message: "Unauthorized: Invalid or expired token" });
     }
 
-    req.user = user; // Attach user to request object
-    next(); // Proceed to the next middleware
   } catch (error) {
     console.error("Authentication error:", error);
-    res.status(401).json({ message: "Unauthorized: Invalid token" });
+    res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 // ✅ Corrected Route (Using 'router' instead of 'app')
@@ -78,19 +79,19 @@ router.post("/signup", async (req, res) => {
 });
 
 // Google Sign-In Route
+// Google OAuth (Remove this duplicate set)
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
-
-// Google Auth Callback
 router.get(
   "/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
     const { token } = req.user;
-    res.redirect(`https://word-srumble-game.vercel.app/dashboard?token=${token}`);
+    res.redirect(`https://word-srumble-game.vercel.app/home?token=${token}`);
   }
 );
 
-// Manual Google Sign-In
+
+// Manual Google Sign-up
 router.post("/google", async (req, res) => {
   try {
     const { username, email } = req.body;
@@ -101,14 +102,16 @@ router.post("/google", async (req, res) => {
     let user = await User.findOne({ email });
 
     if (!user) {
+      const randomPassword = Math.random().toString(36).slice(-8); // Generate a random password
+      const hashedPassword = await bcrypt.hash(randomPassword, 10); // Hash it
+
       user = new User({
         username,
         email,
-        password: "",
+        password: hashedPassword, // Store hashed password
       });
       await user.save();
-    }
-    else{
+    } else {
       return res.status(400).json({ message: "User already exists" });
     }
 
@@ -121,6 +124,7 @@ router.post("/google", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+
 
   
 
@@ -218,20 +222,20 @@ router.post("/signin", async (req, res) => {
 router.get("/check-username/:username", async (req, res) => {
   try {
     const { username } = req.params;
-    console.log("Username  received at backend", username);
+    console.log("Username received at backend", username);
     const user = await User.findOne({ username });
 
     if (user) {
       return res.status(400).json({ message: "Username already exists" });
-    }
-    else{
+    } else {
       return res.status(200).json({ message: "Username available" });
     }
-  }
-  catch(error) {  
+  } catch (error) {  
     console.error("Check Username Error:", error);
+    res.status(500).json({ message: "Server error", error });
   }
 });
+
 
 module.exports = router;
 
