@@ -137,7 +137,6 @@ router.get(
 );
 
 // Google Sign-In Route
-
 router.post("/google-signin", async (req, res) => {
   try {
     const { email } = req.body;
@@ -153,16 +152,22 @@ router.post("/google-signin", async (req, res) => {
     }
 
     // Generate JWT
-    
     const token = jwt.sign(
-      { id: user._id, email: user.email }, // Now includes email
+      { id: user._id, email: user.email }, // Includes both id and email
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
     console.log("Generated JWT Token:", token); // Debugging
 
-    res.json({ message: "Google Sign-In successful", token, user });
+    res.json({ 
+      message: "Google Sign-In successful", 
+      token, 
+      user: {
+        id: user._id,
+        email: user.email
+      }
+    });
   } catch (error) {
     console.error("Google Sign-In Backend Error:", error);
     res.status(500).json({ message: "Server error", error });
