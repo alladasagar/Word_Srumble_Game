@@ -153,7 +153,12 @@ router.post("/google-signin", async (req, res) => {
     }
 
     // Generate JWT
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    
+    const token = jwt.sign(
+      { id: user._id, email: user.email }, // Now includes email
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     console.log("Generated JWT Token:", token); // Debugging
 
