@@ -56,7 +56,6 @@ const Game = () => {
     if (gameOver && user) {
       setLoading(true);
       sendScore({ email: user.email, score }).finally(() => setLoading(false));
-      console.log("API Response:", email, score);
     }
   }, [gameOver, user, score]);
 
