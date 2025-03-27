@@ -22,22 +22,20 @@ const Game = () => {
   const { user } = useAuth();
 
   const shuffleWord = (word) => {
-    let shuffled = word.split("").sort(() => Math.random() - 0.5).join(" ");
-    while (shuffled === word) {
-      shuffled = word.split("").sort(() => Math.random() - 0.5).join(" ");
-    }
-    return shuffled;
+    return word.split("").sort(() => Math.random() - 0.5).join("");
   };
-
+  
   const getNewWord = () => {
     if (attempts >= 9) {
       setGameOver(true);
       return;
     }
+  
     const randomIndex = Math.floor(Math.random() * words.length);
     const selectedWord = words[randomIndex];
+  
     setCurrentWord(selectedWord);
-    setScrambledWord(shuffleWord(selectedWord.answer));
+    setScrambledWord(shuffleWord(selectedWord.answer)); // Shuffle dynamically
     setWords(words.filter((_, index) => index !== randomIndex));
     setUserInput("");
     setTimeLeft(10);
