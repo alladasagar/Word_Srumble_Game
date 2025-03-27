@@ -119,7 +119,7 @@ const Game = () => {
                     setScore(0); 
                     setAttempts(0); 
                     setWords([...wordsData]); 
-                    getNewWord(); 
+                    setTimeout(getNewWord, 0);
                   }} 
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2 transition-all"
                 >
