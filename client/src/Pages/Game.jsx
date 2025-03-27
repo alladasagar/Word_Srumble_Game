@@ -139,6 +139,7 @@ const Game = () => {
         <div className="bg-white p-8 md:p-10 rounded-lg shadow-md text-center max-w-lg md:max-w-xl transition-all w-full">
           <h2 className="text-2xl font-bold text-blue-600 mb-4">Word Scramble Game</h2>
           <p className="text-2xl font-semibold text-gray-800 tracking-widest">{scrambledWord}</p>
+          <p className="text-lg text-gray-700 mb-4">Hint: {currentWord.hint}</p>
           <input 
             type="text" 
             className={`border p-3 rounded-lg text-lg w-full transition-all ${inputStatus === "correct" ? "bg-green-200 border-green-500" : ""} ${inputStatus === "wrong" ? "bg-red-200 border-red-500" : ""}`} 
