@@ -48,40 +48,42 @@ export default function SignUpForm() {
 
     const handleGoogleSignUp = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
-            setLoading(true); // Show loading spinner
-
+            setLoading(true);
+            console.log("Google OAuth Token:", tokenResponse);
+    
             try {
-                console.log("Google OAuth Token:", tokenResponse);
-                const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
-                    headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-                });
-
+                const response = await axios.get(
+                    "https://www.googleapis.com/oauth2/v3/userinfo",
+                    {
+                        headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+                    }
+                );
+    
+                console.log("Google User Data:", response.data); // Debugging
                 const userData = { username: response.data.name, email: response.data.email };
-
-                console.log("Google User Data:", userData);
-
+    
                 const serverResponse = await GoogleSignUp(userData);
-                console.log("User authenticated:", serverResponse);
-
-                if (serverResponse && serverResponse.token) {
+                if (serverResponse?.token) {
                     toast.success("Google Sign-Up Successful!");
-                    login({ id: response.userId, email: UserData.email }, response.token);
-                    setTimeout(() => navigate("/home"), 1000);
+                    login({ id: serverResponse.userId, email: userData.email }, serverResponse.token);
+                    setTimeout(() => navigate("/home"), 500);
                 } else {
-                    toast.error(response?.message || "User already exists");
+                    toast.error("User already exists.");
                 }
             } catch (error) {
                 console.error("Google Sign-Up Failed:", error.response?.data || error);
-                toast.error("Google Sign-Up Failed. Try again.");
+                toast.error("Google Sign-Up Failed.");
             } finally {
-                setLoading(false); // Hide spinner after response
+                setLoading(false);
             }
         },
         onError: (error) => {
-            console.log("Google Sign-Up Failed:", error);
+            console.log("Google Sign-Up Error:", error);
             toast.error("Google Sign-Up failed.");
         },
+        scope: "profile email openid", // Ensure required scopes are added
     });
+    
 
     const handleUsernameChange = (e) => {
         const newUsername = e.target.value;
