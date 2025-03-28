@@ -47,7 +47,7 @@ export default function SignUpForm() {
     };
 
     const handleGoogleSignUp = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
+        onSuccess: (tokenResponse) => {
             console.log("✅ Google Sign-Up Triggered!");
             console.log("Google OAuth Token:", tokenResponse);
         },
