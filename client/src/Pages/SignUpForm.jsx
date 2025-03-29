@@ -166,6 +166,7 @@ return (
                         />
                     </div>
                     <button
+                        type="button"
                         className="w-full flex items-center mt-4 justify-center px-4 py-2 bg-white border rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
                         onClick={() => {
                             console.log("🚀 Google Sign-Up Button Clicked!");
