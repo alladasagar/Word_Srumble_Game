@@ -26,7 +26,7 @@ const Game = () => {
   };
   
   const getNewWord = () => {
-    if (attempts >= 9) {
+    if (attempts >= 10) {
       setGameOver(true);
       return;
     }
@@ -79,7 +79,7 @@ const Game = () => {
     if (gameStarted && !gameOver && timeLeft > 0) {
       const timer = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
-      }, 1000);
+      }, 1500);
 
       return () => clearInterval(timer);
     }
