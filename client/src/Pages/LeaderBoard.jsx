@@ -30,6 +30,8 @@ const LeaderBoard = () => {
       fetchLeaderboard();
     }
   }, [user, page]);
+  
+
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 px-4 ">
@@ -63,9 +65,12 @@ const LeaderBoard = () => {
               </thead>
               <tbody>
                 {leaderboard.map((player, index) => (
+                 console.log("User ID:", user?.id);
+                 console.log("Player ID:", player.id);
+                 console.log("Player _ID:", player._id);
                   <tr
                     key={player._id}
-                    className={`border-b hover:bg-gray-100 ${user?.id === player.id ? "text-blue-600 font-bold" : ""}`}
+                    className={`border-b hover:bg-gray-100 ${user?.id === player._id ? "text-blue-600 font-bold" : ""}`}
                   >
                     <td className="py-2 px-4">{(page - 1) * usersPerPage + index + 1}</td>
                     <td className="py-2 px-4">{player.username}</td>
@@ -94,6 +99,7 @@ const LeaderBoard = () => {
         >
           Next
         </button>
+
       </div>
     </div>
   );
