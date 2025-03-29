@@ -47,50 +47,43 @@ export default function SignUpForm() {
     };
 
     const handleGoogleSignUp = useGoogleLogin({
-        onSuccess: (tokenResponse) => {
+        onSuccess: async (tokenResponse) => { // Add async here
             console.log("✅ Google Sign-Up Triggered!");
             console.log("Google OAuth Token:", tokenResponse);
+    
+            try {
+                const response = await axios.get(
+                    "https://www.googleapis.com/oauth2/v3/userinfo",
+                    {
+                        headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+                    }
+                );
+    
+                console.log("Google User Data:", response.data);
+                const userData = { username: response.data.name, email: response.data.email };
+    
+                const serverResponse = await GoogleSignUp(userData);
+                if (serverResponse?.token) {
+                    toast.success("Google Sign-Up Successful!");
+                    login({ id: serverResponse.userId, email: userData.email }, serverResponse.token);
+                    setTimeout(() => navigate("/home"), 500);
+                } else {
+                    toast.error("User already exists.");
+                }
+            } catch (error) {
+                console.error("Google Sign-Up Failed:", error.response?.data || error);
+                toast.error("Google Sign-Up Failed.");
+            } finally {
+                setLoading(false);
+            }
         },
         onError: (error) => {
-            console.log("❌ Google Sign-Up Error:", error);
+            console.log("Google Sign-Up Error:", error);
+            toast.error("Google Sign-Up failed.");
         },
         scope: "profile email openid",
     });
-
-    console.log("🔍 useGoogleLogin Output:", handleGoogleSignUp);
-
-    try {
-        const response = await axios.get(
-            "https://www.googleapis.com/oauth2/v3/userinfo",
-            {
-                headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-            }
-        );
-
-        console.log("Google User Data:", response.data); // Debugging
-        const userData = { username: response.data.name, email: response.data.email };
-
-        const serverResponse = await GoogleSignUp(userData);
-        if (serverResponse?.token) {
-            toast.success("Google Sign-Up Successful!");
-            login({ id: serverResponse.userId, email: userData.email }, serverResponse.token);
-            setTimeout(() => navigate("/home"), 500);
-        } else {
-            toast.error("User already exists.");
-        }
-    } catch (error) {
-        console.error("Google Sign-Up Failed:", error.response?.data || error);
-        toast.error("Google Sign-Up Failed.");
-    } finally {
-        setLoading(false);
-    }
-},
-onError: (error) => {
-    console.log("Google Sign-Up Error:", error);
-    toast.error("Google Sign-Up failed.");
-},
-    scope: "profile email openid", // Ensure required scopes are added
-    });
+    
 
 
 const handleUsernameChange = (e) => {
