@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getLeaderboard } from "../Apis/game";
 import { useAuth } from "../context/AuthContext";
-import Spinner from "../utils/Spinner"; 
+import Spinner from "../utils/Spinner";
 
 const LeaderBoard = () => {
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const [leaderboard, setLeaderboard] = useState([]);
   const [userRank, setUserRank] = useState(null);
   const [page, setPage] = useState(1);
@@ -30,7 +30,7 @@ const LeaderBoard = () => {
       fetchLeaderboard();
     }
   }, [user, page]);
-  
+
 
 
   return (
@@ -64,19 +64,24 @@ const LeaderBoard = () => {
                 </tr>
               </thead>
               <tbody>
-                {leaderboard.map((player, index) => (
-                 console.log("User ID:", user?.id);
-                 console.log("Player ID:", player.id);
-                 console.log("Player _ID:", player._id);
-                  <tr
-                    key={player._id}
-                    className={`border-b hover:bg-gray-100 ${user?.id === player._id ? "text-blue-600 font-bold" : ""}`}
-                  >
-                    <td className="py-2 px-4">{(page - 1) * usersPerPage + index + 1}</td>
-                    <td className="py-2 px-4">{player.username}</td>
-                    <td className="py-2 px-4">{player.score}</td>
-                  </tr>
-                ))}
+                {leaderboard.map((player, index) => {
+                  console.log("User ID:", user?.id);
+                  console.log("Player ID:", player.id);
+                  console.log("Player _ID:", player._id);
+
+                  return (
+                    <tr
+                      key={player._id}
+                      className={`border-b hover:bg-gray-100 ${user?.id === player._id ? "text-blue-600 font-bold" : ""
+                        }`}
+                    >
+                      <td className="py-2 px-4">{(page - 1) * usersPerPage + index + 1}</td>
+                      <td className="py-2 px-4">{player.username}</td>
+                      <td className="py-2 px-4">{player.score}</td>
+                    </tr>
+                  );
+                })}
+
               </tbody>
             </table>
           </div>
