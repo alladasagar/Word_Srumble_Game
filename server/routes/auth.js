@@ -102,8 +102,8 @@ router.post("/google", async (req, res) => {
     let user = await User.findOne({ email });
 
     if (!user) {
-      const randomPassword = Math.random().toString(36).slice(-8); // Generate a random password
-      const hashedPassword = await bcrypt.hash(randomPassword, 10); // Hash it
+      const randomPassword = Math.random().toString(36).slice(-8); 
+      const hashedPassword = await bcrypt.hash(randomPassword, 10); 
 
       user = new User({
         username,
@@ -117,7 +117,10 @@ router.post("/google", async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.json({ token, user });
+    res.json({ 
+      token, 
+      user: { id: user._id, email: user.email }
+  });
 
   } catch (error) {
     console.error("Google Sign-Up Backend Error:", error);
