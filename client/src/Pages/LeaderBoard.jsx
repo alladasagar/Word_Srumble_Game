@@ -72,7 +72,7 @@ const LeaderBoard = () => {
                   return (
                     <tr
                       key={player._id}
-                      className={`border-b hover:bg-gray-100 ${user?.id === player._id ? "text-blue-600 font-bold" : ""
+                      className={`border-b hover:bg-gray-100 ${user?._id === player._id ? "text-blue-600 font-bold" : ""
                         }`}
                     >
                       <td className="py-2 px-4">{(page - 1) * usersPerPage + index + 1}</td>
