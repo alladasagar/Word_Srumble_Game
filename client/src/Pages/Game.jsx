@@ -12,7 +12,7 @@ const Game = () => {
   const [scrambledWord, setScrambledWord] = useState("");
   const [userInput, setUserInput] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [attempts, setAttempts] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [inputStatus, setInputStatus] = useState(null);
@@ -79,7 +79,7 @@ const Game = () => {
     if (gameStarted && !gameOver && timeLeft > 0) {
       const timer = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
-      }, 1500);
+      }, 1000);
 
       return () => clearInterval(timer);
     }
