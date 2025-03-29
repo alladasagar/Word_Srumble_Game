@@ -165,6 +165,16 @@ return (
                             onChange={(e) => setUserData(prev => ({ ...prev, password: e.target.value }))}
                         />
                     </div>
+                    
+
+                    <button
+                        type="submit"
+                        className="w-full mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        onClick={handleSubmit}
+                        disabled={loading}
+                    >
+                        {loading ? "Signing Up..." : "Sign Up"}
+                    </button>
                     <button
                         type="button"
                         className="w-full flex items-center mt-4 justify-center px-4 py-2 bg-white border rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
@@ -176,15 +186,6 @@ return (
                     >
                         <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5 mr-2" />
                         Sign up with Google
-                    </button>
-
-                    <button
-                        type="submit"
-                        className="w-full mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        onClick={handleSubmit}
-                        disabled={loading}
-                    >
-                        {loading ? "Signing Up..." : "Sign Up"}
                     </button>
                 </form>
             )}
