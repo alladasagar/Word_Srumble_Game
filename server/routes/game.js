@@ -18,6 +18,8 @@ router.post("/update-score", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    user.hasPlayed = true;
+
     // Update only if the new score is higher
     if (user.score < score) {
       user.score = score;
@@ -40,8 +42,9 @@ router.get("/leaderboard", async (req, res) => {
     const { userId, page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
-    // Fetch paginated leaderboard with ranking
+    // Fetch paginated leaderboard excluding users who never played
     const leaderboard = await User.aggregate([
+      { $match: { hasPlayed: true } }, // Only include users who have played
       { $sort: { score: -1, updatedAt: 1 } },
       {
         $setWindowFields: {
@@ -54,13 +57,14 @@ router.get("/leaderboard", async (req, res) => {
       { $project: { username: 1, score: 1, rank: 1 } },
     ]);
 
-    // Get total user count
-    const totalUsers = await User.countDocuments();
+    // Get total count of users who have played at least once
+    const totalUsers = await User.countDocuments({ hasPlayed: true });
 
     // Find the logged-in user's rank
     let userRank = null;
     if (userId) {
       const userRankData = await User.aggregate([
+        { $match: { hasPlayed: true } }, // Ensure only players are ranked
         { $sort: { score: -1, updatedAt: 1 } },
         {
           $setWindowFields: {
@@ -68,7 +72,7 @@ router.get("/leaderboard", async (req, res) => {
             output: { rank: { $documentNumber: {} } },
           },
         },
-        { $match: { _id: userId } },
+        { $match: { _id: new mongoose.Types.ObjectId(userId) } },
         { $project: { rank: 1 } },
       ]);
       userRank = userRankData.length ? userRankData[0].rank : null;
@@ -80,5 +84,6 @@ router.get("/leaderboard", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 module.exports = router;
