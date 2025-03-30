@@ -24,9 +24,14 @@ export default function SignUpForm() {
             toast.error("All fields are required!");
             return;
         }
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+        if (!emailPattern.test(UserData.email)) {
+            toast.error("Invalid email format!");
+            return;
+        }
 
-        setLoading(true); // Show loading spinner
-
+        setLoading(true); 
         try {
             const response = await SignUp(UserData);
             console.log("Signup Response:", response);
@@ -42,7 +47,7 @@ export default function SignUpForm() {
             console.error("Signup Error:", error);
             toast.error("Signup failed. Try again.");
         } finally {
-            setLoading(false); // Hide spinner after response
+            setLoading(false); 
         }
     };
 
