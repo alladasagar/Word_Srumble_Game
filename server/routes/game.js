@@ -21,13 +21,17 @@ router.post("/update-score", async (req, res) => {
     user.hasPlayed = true;
 
     // Update only if the new score is higher
-    if (user.score < score) {
-      user.score = score;
-      await user.save();
-      return res.status(200).json({ message: "Score updated successfully", user });
+    if (!user.hasPlayed) {
+      user.hasPlayed = true;
     }
 
-    res.status(200).json({ message: "New score is not higher, no update made", user });
+    // Update score only if it's higher
+    if (user.score < score) {
+      user.score = score;
+    }
+
+    await user.save();
+    return res.status(200).json({ message: "Score updated successfully", user });
 
   } catch (error) {
     console.error("Error updating score:", error);
