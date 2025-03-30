@@ -226,7 +226,7 @@ router.get("/check-username/:username", async (req, res) => {
   try {
     const { username } = req.params;
     console.log("Username received at backend", username);
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username: { $regex: `^${username}$`, $options: "i" } });
 
     if (user) {
       return res.status(400).json({ message: "Username already exists" });

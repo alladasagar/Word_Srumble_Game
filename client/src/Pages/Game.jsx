@@ -24,16 +24,16 @@ const Game = () => {
   const shuffleWord = (word) => {
     return word.split("").sort(() => Math.random() - 0.5).join("  ");
   };
-
+  
   const getNewWord = () => {
     if (attempts >= 10) {
       setGameOver(true);
       return;
     }
-
+  
     const randomIndex = Math.floor(Math.random() * words.length);
     const selectedWord = words[randomIndex];
-
+  
     setCurrentWord(selectedWord);
     setScrambledWord(shuffleWord(selectedWord.answer)); // Shuffle dynamically
     setWords(words.filter((_, index) => index !== randomIndex));
@@ -99,8 +99,8 @@ const Game = () => {
         <div className="bg-white p-8 md:p-10 rounded-lg shadow-md text-center max-w-lg md:max-w-xl transition-all w-full">
           <h2 className="text-2xl font-bold text-blue-600 mb-4">Word Scramble Game</h2>
           <p className="text-lg text-gray-700 mb-4">Unscramble the word before time runs out!</p>
-          <button
-            onClick={() => setGameStarted(true)}
+          <button 
+            onClick={() => setGameStarted(true)} 
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-all"
           >
             Start Game
@@ -113,25 +113,20 @@ const Game = () => {
             <p className="text-xl font-semibold text-gray-700 mb-4">Final Score: {score}</p>
             {loading ? <Spinner /> : (
               <>
-                <button
-                  onClick={() => {
-                    setGameOver(false);
-                    setScore(0);
-                    setAttempts(0);
-                    setWords([...wordsData]);
-
-                    // Ensure getNewWord runs after words are updated
-                    setTimeout(() => {
-                      getNewWord();
-                    }, 100);
-                  }}
+                <button 
+                  onClick={() => { 
+                    setGameOver(false); 
+                    setScore(0); 
+                    setAttempts(0); 
+                    setWords([...wordsData]); 
+                    setTimeout(getNewWord, 0);
+                  }} 
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2 transition-all"
                 >
                   Play Again
                 </button>
-
-                <button
-                  onClick={() => navigate("/leaderboard")}
+                <button 
+                  onClick={() => navigate("/leaderboard")} 
                   className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded m-2 transition-all"
                 >
                   Leaderboard
@@ -145,15 +140,15 @@ const Game = () => {
           <h2 className="text-2xl font-bold text-blue-600 mb-4">Word Scramble Game</h2>
           <p className="text-2xl font-semibold text-gray-800 tracking-widest">{scrambledWord}</p>
           <p className="text-lg text-gray-700 mb-4">Hint: {currentWord.hint}</p>
-          <input
-            type="text"
-            className={`border p-3 rounded-lg text-lg w-full transition-all ${inputStatus === "correct" ? "bg-green-200 border-green-500" : ""} ${inputStatus === "wrong" ? "bg-red-200 border-red-500" : ""}`}
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            placeholder="Enter your answer"
+          <input 
+            type="text" 
+            className={`border p-3 rounded-lg text-lg w-full transition-all ${inputStatus === "correct" ? "bg-green-200 border-green-500" : ""} ${inputStatus === "wrong" ? "bg-red-200 border-red-500" : ""}`} 
+            value={userInput} 
+            onChange={(e) => setUserInput(e.target.value)} 
+            placeholder="Enter your answer" 
           />
-          <button
-            onClick={checkAnswer}
+          <button 
+            onClick={checkAnswer} 
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg mt-4 transition-all"
           >
             Submit
