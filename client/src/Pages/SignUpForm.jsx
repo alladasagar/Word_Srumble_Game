@@ -18,7 +18,6 @@ export default function SignUpForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("UserData before sending:", UserData);
 
         if (!UserData.username || !UserData.email || !UserData.password) {
             toast.error("All fields are required!");
@@ -65,7 +64,6 @@ export default function SignUpForm() {
                     }
                 );
     
-                console.log("Google User Data:", response.data);
                 const userData = { username: response.data.name, email: response.data.email };
     
                 const serverResponse = await GoogleSignUp(userData);
@@ -77,14 +75,12 @@ export default function SignUpForm() {
                     toast.error("User already exists.");
                 }
             } catch (error) {
-                console.error("Google Sign-Up Failed:", error.response?.data || error);
                 toast.error("Google Sign-Up Failed.");
             } finally {
                 setLoading(false);
             }
         },
         onError: (error) => {
-            console.log("Google Sign-Up Error:", error);
             toast.error("Google Sign-Up failed.");
         },
         scope: "profile email openid",
@@ -108,11 +104,9 @@ useEffect(() => {
         if (UserData.username.length >= 5 && UserData.username.length <= 10) {
             try {
                 const response = await checkUsernameAvailability(UserData.username);
-                console.log("Username availability response:", response);
                 setUsernameAvailable(response);
                 setUsernameMessage(response ? "Username is available!" : "Username is already taken.");
             } catch (error) {
-                console.error("Error checking username availability:", error);
                 setUsernameMessage("Error checking username. Try again.");
             }
         }
@@ -178,7 +172,7 @@ return (
                         onClick={handleSubmit}
                         disabled={loading}
                     >
-                        {loading ? "Signing Up..." : "Signing Up"}
+                        {loading ? "Signing Up..." : "Sign Up"}
                     </button>
                     <button
                         type="button"

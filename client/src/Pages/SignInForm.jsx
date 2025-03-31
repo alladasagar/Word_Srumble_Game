@@ -22,7 +22,6 @@ export default function SignInForm() {
     }
   
     setLoading(true); 
-    console.log("At Frontend:", UserData);
   
     try {
       const response = await signin(UserData);
@@ -37,7 +36,6 @@ export default function SignInForm() {
         toast.error("Invalid credentials!");
       }
     } catch (error) {
-      console.error("Sign-In Error:", error);
       toast.error("An error occurred. Try again.");
     } finally {
       setLoading(false);
@@ -111,7 +109,7 @@ export default function SignInForm() {
               className="w-full mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg"
               disabled={loading}
             >
-              {loading ? "Signing in..." : "Signing in"}
+              {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
         )}
