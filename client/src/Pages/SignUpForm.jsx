@@ -143,7 +143,7 @@ return (
                                     ? "bg-green-100 border-green-500 focus:ring-green-500"
                                     : "bg-red-100 border-red-500 focus:ring-red-500"
                                 }`}
-                            placeholder="Full Name (5-10 chars)"
+                            placeholder="Full Name (5-15 chars)"
                             onChange={handleUsernameChange}
                         />
                         {usernameMessage && (
@@ -199,7 +199,7 @@ return (
                 Already have an account?{" "}
                 <span
                     className="text-blue-600 hover:underline cursor-pointer"
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/signin")}
                 >
                     Sign in
                 </span>
