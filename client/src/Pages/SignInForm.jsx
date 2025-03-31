@@ -5,13 +5,13 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import Spinner from "../utils/Spinner"; // Import Spinner component
+import Spinner from "../utils/Spinner"; 
 
 export default function SignInForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [UserData, setUserData] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false); 
 
   const handlelogin = async (e) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ export default function SignInForm() {
       return;
     }
   
-    setLoading(true); // Show loading spinner
+    setLoading(true); 
     console.log("At Frontend:", UserData);
   
     try {
@@ -30,7 +30,6 @@ export default function SignInForm() {
       if (response && response.token) {
         toast.success("Signin successful!");
         
-        // Correcting variable names
         login(UserData, response.token);
   
         setTimeout(() => navigate("/"), 2000);
@@ -41,13 +40,13 @@ export default function SignInForm() {
       console.error("Sign-In Error:", error);
       toast.error("An error occurred. Try again.");
     } finally {
-      setLoading(false); // Hide spinner after response
+      setLoading(false);
     }
   };
   
   const handleGoogleSignIn = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      setLoading(true); // Show loading spinner
+      setLoading(true);
       console.log("Google signin clicked");
 
       try {
@@ -69,7 +68,7 @@ export default function SignInForm() {
       } catch (error) {
         toast.error("Google Sign-In Failed. Try again.");
       } finally {
-        setLoading(false); // Hide spinner after response
+        setLoading(false); 
       }
     },
     onError: (error) => {
@@ -94,7 +93,7 @@ export default function SignInForm() {
                 type="email"
                 className="w-full mt-1 px-4 py-2 border rounded-lg"
                 placeholder="Email"
-                value={UserData.email} // Controlled input
+                value={UserData.email} 
                 onChange={(e) => setUserData((prev) => ({ ...prev, email: e.target.value }))}
               />
             </div>

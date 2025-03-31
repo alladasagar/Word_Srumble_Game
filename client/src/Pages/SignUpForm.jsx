@@ -4,13 +4,13 @@ import { SignUp, GoogleSignUp, checkUsernameAvailability } from "../Apis/api";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import Spinner from "../utils/Spinner"; // Import Spinner component
+import Spinner from "../utils/Spinner"; 
 import { useAuth } from "../context/AuthContext";
 
 export default function SignUpForm() {
     const navigate = useNavigate();
     const [UserData, setUserData] = useState({ username: "", email: "", password: "" });
-    const [loading, setLoading] = useState(false); // Loading state
+    const [loading, setLoading] = useState(false); 
     const [usernameAvailable, setUsernameAvailable] = useState(null);
     const [usernameMessage, setUsernameMessage] = useState("");
 
@@ -52,7 +52,7 @@ export default function SignUpForm() {
     };
 
     const handleGoogleSignUp = useGoogleLogin({
-        onSuccess: async (tokenResponse) => { // Add async here
+        onSuccess: async (tokenResponse) => { 
             setLoading(true); 
             console.log("✅ Google Sign-Up Triggered!");
             console.log("Google OAuth Token:", tokenResponse);
@@ -117,8 +117,8 @@ useEffect(() => {
             }
         }
     };
-    const timeoutId = setTimeout(checkAvailability, 500); // Debounce for 500ms
-    return () => clearTimeout(timeoutId); // Cleanup previous calls
+    const timeoutId = setTimeout(checkAvailability, 500); 
+    return () => clearTimeout(timeoutId); 
 }, [UserData.username]);
 
 return (

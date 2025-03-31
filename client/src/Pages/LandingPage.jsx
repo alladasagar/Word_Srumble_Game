@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
-import Spinner from "../utils/Spinner"; // Import Spinner component
+import Spinner from "../utils/Spinner"; 
 
 const LandingPage = ({ isAuthenticated, isAuthLoading }) => {
   const navigate = useNavigate();

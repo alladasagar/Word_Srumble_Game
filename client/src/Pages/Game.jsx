@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import wordsData from "../assests/data";
 import { useAuth } from "../context/AuthContext";
 import { sendScore } from "../Apis/game";
-import Spinner from "../utils/Spinner"; // Import Spinner component
+import Spinner from "../utils/Spinner"; 
 
 const Game = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Game = () => {
   const [gameOver, setGameOver] = useState(false);
   const [inputStatus, setInputStatus] = useState(null);
   const [gameStarted, setGameStarted] = useState(false);
-  const [loading, setLoading] = useState(false); // Loading only for score submission
+  const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
 
@@ -39,7 +39,7 @@ const Game = () => {
     const selectedWord = words[randomIndex];
   
     setCurrentWord(selectedWord);
-    setScrambledWord(shuffleWord(selectedWord.answer)); // Shuffle dynamically
+    setScrambledWord(shuffleWord(selectedWord.answer)); 
     setWords(words.filter((_, index) => index !== randomIndex));
     setUserInput("");
     setTimeLeft(10);

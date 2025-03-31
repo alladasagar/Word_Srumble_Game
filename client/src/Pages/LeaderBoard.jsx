@@ -14,7 +14,7 @@ const LeaderBoard = () => {
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
-      setLoading(true); // Start loading
+      setLoading(true); 
       try {
         const data = await getLeaderboard(user?._id, page, usersPerPage);
         setLeaderboard(data.leaderboard);
@@ -23,7 +23,7 @@ const LeaderBoard = () => {
       } catch (error) {
         console.error("Error fetching leaderboard:", error);
       }
-      setLoading(false); // End loading
+      setLoading(false); 
     };
 
     if (user) {
@@ -46,12 +46,11 @@ const LeaderBoard = () => {
           </h2>
         </div>
       )}
-
       {/* Leaderboard Table or Loading Spinner */}
       <div className="w-full max-w-3xl bg-white shadow-md rounded-lg overflow-hidden">
         {loading ? (
           <div className="flex justify-center items-center py-10">
-            <Spinner /> {/* Show Spinner while loading */}
+            <Spinner /> 
           </div>
         ) : (
           <div className="overflow-y-auto max-h-96">
@@ -65,11 +64,6 @@ const LeaderBoard = () => {
               </thead>
               <tbody>
                 {leaderboard.map((player, index) => {
-                  console.log("User ID:", user?.id);
-                  console.log("User _ID:", user?._id);
-                  console.log("Player ID:", player.id);
-                  console.log("Player _ID:", player._id);
-
                   return (
                     <tr
                       key={player._id}
