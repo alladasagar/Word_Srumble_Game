@@ -66,7 +66,7 @@ const LeaderBoard = () => {
               <tbody>
                 {leaderboard.map((player, index) => {
                   console.log("User ID:", user?.id);
-                  console.log("User ID:", user?._id);
+                  console.log("User _ID:", user?._id);
                   console.log("Player ID:", player.id);
                   console.log("Player _ID:", player._id);
 

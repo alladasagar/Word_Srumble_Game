@@ -178,7 +178,7 @@ return (
                         onClick={handleSubmit}
                         disabled={loading}
                     >
-                        {loading ? "Signing Up..." : "Sign Up"}
+                        {loading ? "Signing Up..." : "Signing Up"}
                     </button>
                     <button
                         type="button"

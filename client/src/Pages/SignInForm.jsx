@@ -112,7 +112,7 @@ export default function SignInForm() {
               className="w-full mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg"
               disabled={loading}
             >
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? "Signing in..." : "Signing in"}
             </button>
           </form>
         )}
