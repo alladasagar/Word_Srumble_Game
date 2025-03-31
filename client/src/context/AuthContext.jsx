@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("🔑 Token from localStorage:", token);
 
     if (token) {
         try {
@@ -23,7 +22,6 @@ export const AuthProvider = ({ children }) => {
                 setUser({ _id: userId, email: userEmail });
             }
         } catch (error) {
-            console.error("❌ Invalid token:", error);
             logout();
         }
     }

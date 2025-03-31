@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./db");
 const passport = require("passport");
-require("./config/passport"); // Ensure Passport is configured
+require("./config/passport"); 
 const cookieParser = require("cookie-parser");
 
 dotenv.config();
@@ -13,11 +13,9 @@ const gameRoutes = require("./routes/game");
 
 const app = express();
 
-//  Improved Allowed Origins (Fixing CORS issues)
 const allowedOrigins = [
-  "https://word-srumble-game.vercel.app", // Frontend (Vercel)
-  "http://localhost:5173", // Local development
-  "https://word-srumble-game.onrender.com" // Replace with your actual Render backend URL
+  "https://word-srumble-game.vercel.app", 
+  "https://word-srumble-game.onrender.com" 
 ];
 
 app.use(
@@ -26,17 +24,17 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        console.error("❌ Blocked by CORS:", origin);
+        console.error(" Blocked by CORS:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Important for authentication cookies
+    credentials: true, 
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"], // Ensure headers are handled correctly
+    allowedHeaders: ["Content-Type", "Authorization"], 
   })
 )
 
-//  Security Headers Fix (Prevents iframe & cross-origin issues)
+
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
   res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
@@ -48,10 +46,10 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
 
-//  Improved Database Connection Handling
+
 connectDB().catch((err) => {
-  console.error("❌ Database Connection Failed:", err);
-  process.exit(1); // Exit if DB connection fails
+  console.error("Database Connection Failed:", err);
+  process.exit(1); 
 });
 
 // Routes
@@ -60,11 +58,11 @@ app.use("/api/game", gameRoutes);
 
 //  Root Route
 app.get("/", (req, res) => {
-  res.send("🚀 Server is running...");
+  res.send("Server is running...");
 });
 
 //  Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🔥 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

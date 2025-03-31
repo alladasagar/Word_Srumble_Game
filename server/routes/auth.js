@@ -37,7 +37,7 @@ const authenticateUser = async (req, res, next) => {
 
 
 
-// ✅ Corrected Route (Using 'router' instead of 'app')
+// Get User Details Route
 
 router.get("/getUser", authenticateUser, async (req, res) => {
   console.log("Fetching user data at backend");
@@ -50,9 +50,8 @@ router.get("/getUser", authenticateUser, async (req, res) => {
 });
 
 
-
-
 // Register Route
+
 router.post("/signup", async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -78,8 +77,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// Google Sign-In Route
-// Google OAuth (Remove this duplicate set)
+
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 router.get(
   "/google/callback",
@@ -90,8 +88,8 @@ router.get(
   }
 );
 
+//  Google Sign-up Route
 
-// Manual Google Sign-up
 router.post("/google", async (req, res) => {
   try {
     const { username, email } = req.body;
@@ -108,7 +106,7 @@ router.post("/google", async (req, res) => {
       user = new User({
         username,
         email,
-        password: hashedPassword, // Store hashed password
+        password: hashedPassword, 
       });
       await user.save();
     } else {
@@ -158,14 +156,13 @@ router.post("/google-signin", async (req, res) => {
       return res.status(400).json({ message: "User does not exist. Please sign up first." });
     }
 
-    // Generate JWT
     const token = jwt.sign(
-      { id: user._id, email: user.email }, // Includes both id and email
+      { id: user._id, email: user.email }, 
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    console.log("Generated JWT Token:", token); // Debugging
+    console.log("Generated JWT Token:", token); 
 
     res.json({ 
       message: "Google Sign-In successful", 
@@ -181,12 +178,13 @@ router.post("/google-signin", async (req, res) => {
   }
 });
 
+//Sign in Route
+
 router.post("/signin", async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log("Sign-In Request:", req.body);
 
-    // Check if user exists
     const user = await User.findOne({ email });
     console.log("User Found:", user);
 
@@ -194,7 +192,6 @@ router.post("/signin", async (req, res) => {
       return res.status(400).json({ message: "User does not exist" });
     }
 
-    // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     console.log("Password Match:", isMatch);
 
@@ -202,9 +199,8 @@ router.post("/signin", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // ✅ Include email in JWT payload
     const token = jwt.sign(
-      { id: user._id, email: user.email }, // Now includes email
+      { id: user._id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -220,8 +216,8 @@ router.post("/signin", async (req, res) => {
 });
 
 
-
-
+//Useranme check Route
+ 
 router.get("/check-username/:username", async (req, res) => {
   try {
     const { username } = req.params;
