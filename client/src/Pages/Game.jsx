@@ -21,8 +21,12 @@ const Game = () => {
 
   const { user } = useAuth();
 
-  const shuffleWord = (word) => {
-    return word.split("").sort(() => Math.random() - 0.5).join("  ");
+  const shuffleWord = (word, times = 5) => {
+    let shuffled = word.split("");
+    for (let i = 0; i < times; i++) {
+      shuffled = shuffled.sort(() => Math.random() - 0.5);
+    }
+    return shuffled.join("  ");
   };
   
   const getNewWord = () => {

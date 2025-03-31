@@ -94,8 +94,8 @@ export default function SignUpForm() {
 
 const handleUsernameChange = (e) => {
     const newUsername = e.target.value;
-    if (newUsername.length < 5 || newUsername.length > 10) {
-        setUsernameMessage("Username must be between 5 to 10 characters.");
+    if (newUsername.length < 5 || newUsername.length > 15) {
+        setUsernameMessage("Username must be between 5 to 15 characters.");
         setUsernameAvailable(null);
     } else {
         setUsernameMessage("");
