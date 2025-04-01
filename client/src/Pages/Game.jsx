@@ -42,7 +42,7 @@ const Game = () => {
     setScrambledWord(shuffleWord(selectedWord.answer)); 
     setWords(words.filter((_, index) => index !== randomIndex));
     setUserInput("");
-    setTimeLeft(10);
+    setTimeLeft(15);
     setInputStatus(null);
     setAttempts((prev) => prev + 1);
   };
